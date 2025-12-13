@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-// Logout Button
-import { signOutAction } from "@/app/actions/auth";
-import { Button } from "@/components/ui/button";
+import { AppSidebar } from "@/components/AppSidebar";
 
 // Updated Interface
 interface TodoItem {
@@ -205,180 +202,175 @@ export default function TodoApp() {
     );
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 dark:bg-black p-4">
-      <div className="container mx-auto max-w-4xl">
+    <div className="flex min-h-screen bg-zinc-50 dark:bg-black">
+      {/* SIDEBAR */}
+      <AppSidebar />
 
-        {/* 🔥 LOGOUT BUTTON ADDED HERE */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
-            My Todo Dashboard
-          </h2>
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1 p-4 md:p-8 ml-0 md:ml-0 overflow-y-auto h-screen">
+        <div className="container mx-auto max-w-4xl">
 
-          <form action={signOutAction}>
-            <Button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
-              Logout
-            </Button>
-          </form>
-        </div>
+          {/* HEADER */}
+          <header className="mb-8 text-center py-6">
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">Todo App</h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-2">Organize your tasks efficiently</p>
+          </header>
 
-        {/* HEADER */}
-        <header className="mb-8 text-center py-6">
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white">Todo App</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">Organize your tasks efficiently</p>
-        </header>
+          {/* FORM */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+              {editingId ? "Edit Todo" : "Add New Todo"}
+            </h2>
 
-        {/* FORM */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
-            {editingId ? "Edit Todo" : "Add New Todo"}
-          </h2>
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4 md:grid-cols-2 mb-4">
+                <div>
+                  <label className="text-sm font-medium">Title *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingId ? editTitle : title}
+                    onChange={(e) => editingId ? setEditTitle(e.target.value) : setTitle(e.target.value)}
+                    className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-4 md:grid-cols-2 mb-4">
-              <div>
-                <label className="text-sm font-medium">Title *</label>
+                <div>
+                  <label className="text-sm font-medium">Priority</label>
+                  <select
+                    value={editingId ? editPriority : priority}
+                    onChange={(e) => editingId ? setEditPriority(e.target.value as any) : setPriority(e.target.value as any)}
+                    className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="text-sm font-medium">Description</label>
+                <textarea
+                  rows={2}
+                  value={editingId ? editDescription : description}
+                  onChange={(e) => editingId ? setEditDescription(e.target.value) : setDescription(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 text-gray-900 dark:text-white"
+                ></textarea>
+              </div>
+
+              <div className="mb-6">
+                <label className="text-sm font-medium">Due Date</label>
                 <input
-                  type="text"
-                  required
-                  value={editingId ? editTitle : title}
-                  onChange={(e) => editingId ? setEditTitle(e.target.value) : setTitle(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
+                  type="datetime-local"
+                  value={editingId ? editDueDate : dueDate}
+                  onChange={(e) => editingId ? setEditDueDate(e.target.value) : setDueDate(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
 
-              <div>
-                <label className="text-sm font-medium">Priority</label>
-                <select
-                  value={editingId ? editPriority : priority}
-                  onChange={(e) => editingId ? setEditPriority(e.target.value as any) : setPriority(e.target.value as any)}
-                  className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
+              <div className="flex space-x-3">
+                <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                  {editingId ? "Update Todo" : "Add Todo"}
+                </button>
+
+                {editingId && (
+                  <button
+                    type="button"
+                    onClick={() => setEditingId(null)}
+                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+                  >
+                    Cancel
+                  </button>
+                )}
               </div>
-            </div>
+            </form>
+          </div>
 
-            <div className="mb-4">
-              <label className="text-sm font-medium">Description</label>
-              <textarea
-                rows={2}
-                value={editingId ? editDescription : description}
-                onChange={(e) => editingId ? setEditDescription(e.target.value) : setDescription(e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
-              ></textarea>
-            </div>
+          {/* TASK LIST */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                My Tasks ({filteredTodos.length})
+              </h2>
 
-            <div className="mb-6">
-              <label className="text-sm font-medium">Due Date</label>
               <input
-                type="datetime-local"
-                value={editingId ? editDueDate : dueDate}
-                onChange={(e) => editingId ? setEditDueDate(e.target.value) : setDueDate(e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
+                type="text"
+                placeholder="Search tasks…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="px-3 py-2 border rounded-lg dark:bg-gray-700 text-gray-900 dark:text-white w-64 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
-            <div className="flex space-x-3">
-              <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg">
-                {editingId ? "Update Todo" : "Add Todo"}
-              </button>
+            {filteredTodos.map(todo => {
+              const id = getTodoId(todo);
 
-              {editingId && (
-                <button
-                  type="button"
-                  onClick={() => setEditingId(null)}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+              return (
+                <div
+                  key={id}
+                  className={`border p-4 rounded-lg mb-3 ${todo.completed ? "bg-green-50 dark:bg-green-900/10" : "dark:border-gray-700"}`}
                 >
-                  Cancel
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
+                  <div className="flex justify-between">
+                    <div className="flex space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={todo.completed}
+                        onChange={() => handleToggleComplete(id, todo.completed)}
+                        className="h-5 w-5 mt-1"
+                      />
 
-        {/* TASK LIST */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              My Tasks ({filteredTodos.length})
-            </h2>
+                      <div>
+                        <h3 className={`font-semibold text-lg text-gray-900 dark:text-white ${todo.completed ? "line-through text-gray-500 dark:text-gray-400" : ""}`}>
+                          {todo.title}
+                        </h3>
 
-            <input
-              type="text"
-              placeholder="Search tasks…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3 py-2 border rounded-lg dark:bg-gray-700"
-            />
-          </div>
-
-          {filteredTodos.map(todo => {
-            const id = getTodoId(todo);
-
-            return (
-              <div
-                key={id}
-                className={`border p-4 rounded-lg mb-3 ${todo.completed ? "bg-green-50" : ""}`}
-              >
-                <div className="flex justify-between">
-                  <div className="flex space-x-3">
-                    <input
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={() => handleToggleComplete(id, todo.completed)}
-                      className="h-5 w-5"
-                    />
-
-                    <div>
-                      <h3 className={`font-semibold ${todo.completed ? "line-through" : ""}`}>
-                        {todo.title}
-                      </h3>
-
-                      {todo.description && (
-                        <p className="text-gray-600 dark:text-gray-400">{todo.description}</p>
-                      )}
-
-                      <div className="flex gap-2 mt-2">
-                        <span className={`px-2 py-1 text-xs rounded ${getPriorityClass(todo.priority)}`}>
-                          {todo.priority}
-                        </span>
-
-                        {todo.dueDate && (
-                          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
-                            Due: {formatDate(todo.dueDate)}
-                          </span>
+                        {todo.description && (
+                          <p className="text-gray-600 dark:text-gray-400 mt-1">{todo.description}</p>
                         )}
+
+                        <div className="flex gap-2 mt-2">
+                          <span className={`px-2 py-1 text-xs font-medium rounded ${getPriorityClass(todo.priority)}`}>
+                            {todo.priority.toUpperCase()}
+                          </span>
+
+                          {todo.dueDate && (
+                            <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded font-medium">
+                              Due: {formatDate(todo.dueDate)}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex space-x-2">
-                    <button onClick={() => startEditing(todo)} className="text-blue-600">
-                      Edit
-                    </button>
+                    <div className="flex space-x-2 items-start">
+                      <button onClick={() => startEditing(todo)} className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition">
+                        Edit
+                      </button>
 
-                    <button onClick={() => handleDelete(id)} className="text-red-600">
-                      Delete
-                    </button>
+                      <button onClick={() => handleDelete(id)} className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition">
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
+              );
+            })}
+
+            {filteredTodos.length === 0 && (
+              <div className="text-center py-8">
+                <p className="text-gray-500 dark:text-gray-400 text-lg">
+                  {searchQuery ? "No matching tasks found." : "No tasks yet. Create one above!"}
+                </p>
               </div>
-            );
-          })}
+            )}
+          </div>
 
-          {filteredTodos.length === 0 && (
-            <p className="text-center text-gray-600 dark:text-gray-400">
-              No tasks found.
-            </p>
-          )}
+          <footer className="mt-8 text-center text-gray-600 dark:text-gray-400 pb-4">
+            Todo App © {new Date().getFullYear()}
+          </footer>
+
         </div>
-
-        <footer className="mt-8 text-center text-gray-600 dark:text-gray-400">
-          Todo App © {new Date().getFullYear()}
-        </footer>
-
       </div>
     </div>
   );
