@@ -120,3 +120,72 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Chat animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* styles/globals.css or similar */
+
+/* For Webkit browsers (Chrome, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light background for the track */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; /* Darker thumb */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Even darker on hover */
+}
+
+/* Dark mode specific scrollbar styles */
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #333; /* Dark background for the track */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #555; /* Lighter thumb in dark mode */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #777; /* Even lighter on hover in dark mode */
+}
