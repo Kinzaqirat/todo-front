@@ -95,6 +95,7 @@ export interface ChatRequest {
 
 // Response from chat endpoint
 export interface ChatResponse {
+  response: string;
   response_message: string;
   action_taken?: string | null;
   task_data?: {

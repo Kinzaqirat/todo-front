@@ -19,6 +19,8 @@ COPY . .
 
 # Build the application
 ENV NEXT_TELEMETRY_DISABLED=1
+# Set placeholder for build - actual value provided at runtime
+ENV GEMINI_API_KEY=""
 RUN npm run build
 
 # Stage 3: Runner (Production)
